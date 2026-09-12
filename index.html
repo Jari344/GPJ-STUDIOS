@@ -361,23 +361,6 @@
     .deliver-to{ display:none; }
   }
 
-  /* ---- Extra small-device tuning (phones) ---- */
-  @media (max-width:480px){
-    .topnav{ flex-wrap:wrap; row-gap:8px; padding:10px 12px; }
-    .wordmark{ font-size:0.95rem; }
-    .nav-search{ order:3; flex:1 1 100%; }
-    .nav-action small{ display:none; }
-    .tile{ flex-basis:158px; padding:14px; gap:8px; }
-    .tile-img-wrap{ height:104px; }
-    .tile-title{ font-size:0.84rem; }
-    .tile-price{ font-size:0.95rem; }
-    .hero-slide{ flex-direction:column; text-align:center; gap:16px; padding:26px 18px; min-height:auto; }
-    .hero-slide .glow{ display:none; }
-    .hero-slide-text{ max-width:100%; }
-    .explore-grid{ grid-template-columns:1fr; }
-    .modal-content{ padding:24px; border-radius:24px; }
-  }
-
   /* ================= Modals & Drawer (shared) ================= */
   .scrim, .modal-overlay{
     position:fixed; inset:0; background:rgba(20,17,16,0.55);
@@ -445,12 +428,6 @@
   .form-group input::placeholder{ color:var(--ink-faint); font-weight:500; }
   .form-group input:focus{ box-shadow:var(--sh-in-deep); }
   .form-group input.field-error{ box-shadow:inset 0 0 0 2px var(--error), var(--sh-in); }
-
-  .form-group select{
-    width:100%; padding:13px 18px; border-radius:16px; border:none;
-    background:var(--clay); color:var(--ink); font-family:'Quicksand', sans-serif; font-weight:600;
-    outline:none; box-shadow:var(--sh-in); transition:box-shadow 0.2s; margin-bottom:16px;
-  }
 
   .primary-btn{
     width:100%; background:var(--terracotta); color:#fff8ef;
@@ -762,7 +739,7 @@
         <h2>More accessories</h2>
         <span class="see-all" onclick="document.getElementById('physical-shop').scrollIntoView({behavior:'smooth'})">See all products</span>
       </div>
-      <div class="card-row" id="accessories-shop">
+      <div class="card-row">
         <!-- PHYSICAL 5–9 -->
         <div class="tile product-card" data-title="HUION HS64 DRAWINGTABLET" data-desc="HUION HS64 Graphics Drawing Tablet, 6.3 x 4 inch Battery-Free Pen Tablet with Tilt Function, 8192 Pressure Sensitive for Digital Art, Painting & Design, Compatible with Windows, Mac, Android & Linux" data-price-label="Rs 2300" data-price-value="2300" data-type="physical" data-gallery="i5.jpg,i5.1.jpg,i5.2.jpg,i5.3.jpg">
           <span class="tile-badge">Tablet</span>
@@ -979,7 +956,7 @@
     </div>
   </div>
 
-  <!-- 4. Login / Sign Up Modal -->
+  <!-- 4. Login / Sign Up Modal (No Backend, real localStorage validation) -->
   <div id="login-modal" class="modal-overlay" onclick="closeModals(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="close-modal" onclick="closeModals()">&times;</button>
@@ -1038,57 +1015,7 @@
       <div id="profile-area" style="display:none; text-align:center;">
         <h3 style="margin-top:0; font-family:'Space Grotesk', sans-serif; font-weight:700;">Welcome back, <span id="profile-name"></span></h3>
         <p style="color:var(--ink-dim); font-size:0.85rem; margin-bottom:24px; font-weight:500;" id="profile-email"></p>
-        
-        <!-- Admin Dashboard Button -->
-        <div id="admin-dashboard-btn" style="display:none; margin-bottom: 16px;">
-           <button class="primary-btn" style="background:var(--gold); color:#2a2110;" onclick="openAdminModal()">Open Admin Dashboard</button>
-        </div>
-
         <button class="primary-btn" style="background:var(--clay); color:var(--ink); box-shadow:var(--sh-out-sm);" onclick="handleLogout()">Sign Out</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. Admin Dashboard Modal -->
-  <div id="admin-modal" class="modal-overlay" onclick="closeModals(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="close-modal" onclick="closeModals()">&times;</button>
-      <h3 style="margin-top:0; font-family:'Space Grotesk', sans-serif; font-weight:700;">Add New Product</h3>
-      <p style="color:var(--ink-dim); font-size:0.85rem; margin-bottom:24px; font-weight:500;">Add an item directly to your store catalog. Changes here are visible to every visitor, on every device.</p>
-
-      <form onsubmit="event.preventDefault(); handleAddProduct();">
-        <div class="form-group">
-          <label>Product Title *</label>
-          <input type="text" id="admin-title" placeholder="e.g. Awesome Watch" required>
-        </div>
-        <div class="form-group">
-          <label>Description *</label>
-          <input type="text" id="admin-desc" placeholder="Product details..." required>
-        </div>
-        <div class="form-group">
-          <label>Price (Rs) *</label>
-          <input type="number" id="admin-price" placeholder="e.g. 1999" required>
-        </div>
-        <div class="form-group">
-          <label>Product Type *</label>
-          <select id="admin-type">
-            <option value="physical">Physical Product</option>
-            <option value="digital">Digital & Website</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Image Name (e.g. 'i8') *</label>
-          <input type="text" id="admin-img" placeholder="e.g. i8" required>
-          <p class="field-hint" style="margin-top:6px; margin-bottom:0;">Auto-generates 4 images (i8.jpg, i8.1.jpg, i8.2.jpg, i8.3.jpg) if Physical.</p>
-        </div>
-        
-        <div class="auth-msg" id="admin-msg"></div>
-        <button type="submit" class="primary-btn">Add Product to Store</button>
-      </form>
-
-      <div style="margin-top:28px; border-top:1px solid rgba(120,106,88,0.2); padding-top:20px;">
-        <h3 style="margin:0 0 14px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:1rem;">Manage products</h3>
-        <div id="admin-product-list" style="display:flex; flex-direction:column; gap:10px; max-height:280px; overflow-y:auto;"></div>
       </div>
     </div>
   </div>
@@ -1412,42 +1339,7 @@
       closeModals();
     }
 
-    // --- Real (client-side only) Auth System & Admin Panel ---
-    // NOTE: product data (added/deleted products) is stored with shared:true so it
-    // is visible to every visitor on every device, not just this browser.
-    async function loadCustomProducts(){
-      try {
-        const result = await window.storage.get('custom_products', true);
-        return result ? JSON.parse(result.value) : [];
-      } catch(e) {
-        return [];
-      }
-    }
-    async function saveCustomProducts(list){
-      try {
-        const result = await window.storage.set('custom_products', JSON.stringify(list), true);
-        if(!result) console.error('Failed to save custom products');
-      } catch(e) {
-        console.error('Storage error saving custom products:', e);
-      }
-    }
-    async function loadHiddenProducts(){
-      try {
-        const result = await window.storage.get('hidden_products', true);
-        return result ? JSON.parse(result.value) : [];
-      } catch(e) {
-        return [];
-      }
-    }
-    async function saveHiddenProducts(list){
-      try {
-        const result = await window.storage.set('hidden_products', JSON.stringify(list), true);
-        if(!result) console.error('Failed to save hidden products');
-      } catch(e) {
-        console.error('Storage error saving hidden products:', e);
-      }
-    }
-
+    // --- Real (client-side only) Auth System ---
     function getUsers(){
       try { return JSON.parse(localStorage.getItem('gpj_users')) || []; }
       catch(e) { return []; }
@@ -1456,7 +1348,6 @@
     function getSession(){
       const email = localStorage.getItem('gpj_session');
       if(!email) return null;
-      if(email === 'j786@gmail.com') return { name: 'Admin Jari', email: 'j786@gmail.com' }; // Admin hardcoded session
       const users = getUsers();
       return users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
     }
@@ -1472,10 +1363,7 @@
     function checkAuthStatus() {
       const session = getSession();
       const authBtn = document.getElementById('auth-btn');
-      
-      if (session && session.email === 'j786@gmail.com') {
-        authBtn.innerHTML = `<small>Hi Admin</small><span class="line2">Dashboard</span>`;
-      } else if (session) {
+      if (session) {
         authBtn.innerHTML = `<small>Hi, ${session.name.split(' ')[0]}</small><span class="line2">Account &amp; Lists</span>`;
       } else {
         authBtn.innerHTML = `<small>Hello, sign in</small><span class="line2">Account &amp; Lists</span>`;
@@ -1494,169 +1382,10 @@
         document.getElementById('profile-area').style.display = 'block';
         document.getElementById('profile-name').textContent = session.name;
         document.getElementById('profile-email').textContent = session.email;
-        
-        // Show admin dashboard button only for admin
-        document.getElementById('admin-dashboard-btn').style.display = (session.email === 'j786@gmail.com') ? 'block' : 'none';
       } else {
         switchToLogin();
       }
       document.getElementById('login-modal').classList.add('open');
-    }
-
-    async function openAdminModal() {
-      closeModals(); // Close the profile modal
-      clearFieldErrors();
-      showMsg('admin-msg', '');
-      document.getElementById('admin-modal').classList.add('open');
-      await renderAdminProductList();
-    }
-
-    // --- Admin: manage/delete products ---
-    async function renderAdminProductList(){
-      const listEl = document.getElementById('admin-product-list');
-      if(!listEl) return;
-
-      const cards = Array.from(document.querySelectorAll('.product-card'));
-      if(cards.length === 0){
-        listEl.innerHTML = '<p class="drawer-empty" style="padding:20px 0;">No products yet.</p>';
-        return;
-      }
-
-      listEl.innerHTML = cards.map((card, i) => {
-        const title = card.dataset.title || '';
-        const priceLabel = card.dataset.priceLabel || '';
-        return `
-          <div class="drawer-item">
-            <div>
-              <div class="drawer-item-name">${escapeHtml(title)}</div>
-              <div class="drawer-item-price">${escapeHtml(priceLabel)}</div>
-            </div>
-            <button class="drawer-item-remove" data-admin-del-idx="${i}">Delete</button>
-          </div>
-        `;
-      }).join('');
-
-      listEl.querySelectorAll('[data-admin-del-idx]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const idx = parseInt(btn.dataset.adminDelIdx, 10);
-          deleteProduct(cards[idx]);
-        });
-      });
-    }
-
-    async function deleteProduct(card){
-      if(!card) return;
-      const title = card.dataset.title || '';
-      if(!confirm(`Delete "${title}" from the store? This will remove it for everyone, on every device.`)) return;
-
-      if(card.classList.contains('dynamic-product-card')){
-        // Custom product added via the admin form — remove it from the shared catalog
-        let customProducts = await loadCustomProducts();
-        customProducts = customProducts.filter(p => p.title !== title);
-        await saveCustomProducts(customProducts);
-      } else {
-        // Built-in product — remember it's hidden (shared) so it stays gone everywhere
-        let hidden = await loadHiddenProducts();
-        if(!hidden.includes(title)) hidden.push(title);
-        await saveHiddenProducts(hidden);
-      }
-
-      card.remove();
-      renderAdminProductList();
-    }
-
-    async function applyHiddenProducts(){
-      const hidden = await loadHiddenProducts();
-      if(hidden.length === 0) return;
-      document.querySelectorAll('.product-card').forEach(card => {
-        if(hidden.includes(card.dataset.title)) card.remove();
-      });
-    }
-
-    async function handleAddProduct() {
-      const title = document.getElementById('admin-title').value.trim();
-      const desc = document.getElementById('admin-desc').value.trim();
-      const price = parseFloat(document.getElementById('admin-price').value);
-      const type = document.getElementById('admin-type').value;
-      const imgBase = document.getElementById('admin-img').value.trim(); // e.g. "i8"
-
-      if(!title || !desc || !price || !imgBase) {
-        showMsg('admin-msg', 'Please fill all fields.', false);
-        return;
-      }
-
-      const mainImg = `${imgBase}.jpg`;
-      const gallery = (type === 'physical') 
-        ? `${imgBase}.jpg,${imgBase}.1.jpg,${imgBase}.2.jpg,${imgBase}.3.jpg`
-        : `${imgBase}.jpg`;
-
-      const newProduct = {
-        title, desc, 
-        priceLabel: `Rs ${price.toLocaleString()}`, 
-        priceValue: price, 
-        type, mainImg, gallery
-      };
-
-      let customProducts = await loadCustomProducts();
-      customProducts.push(newProduct);
-      await saveCustomProducts(customProducts);
-
-      showMsg('admin-msg', 'Product added successfully! It will show up for everyone, on every device.', true);
-
-      // Clear the form
-      document.getElementById('admin-title').value = '';
-      document.getElementById('admin-desc').value = '';
-      document.getElementById('admin-price').value = '';
-      document.getElementById('admin-img').value = '';
-
-      // Render the new item immediately
-      await renderCustomProducts();
-      renderAdminProductList();
-    }
-
-    async function renderCustomProducts() {
-      let customProducts = await loadCustomProducts();
-      
-      // Clean up previously rendered dynamic products so they don't duplicate on re-render
-      document.querySelectorAll('.dynamic-product-card').forEach(el => el.remove());
-
-      customProducts.forEach(prod => {
-        const isDigital = prod.type === 'digital';
-        const badgeText = isDigital ? 'Custom · Digital' : 'Physical';
-        const badgeClass = isDigital ? 'tile-badge digital' : 'tile-badge';
-        const infoClass = isDigital ? 'js-info-more' : 'js-physical-more';
-        const addClass = isDigital ? 'js-info-add' : 'js-physical-add';
-        const shippingText = isDigital ? 'Delivered digitally' : 'Ships in 3–5 days';
-
-        const html = `
-          <div class="tile product-card dynamic-product-card" 
-               data-title="${escapeHtml(prod.title)}" 
-               data-desc="${escapeHtml(prod.desc)}" 
-               data-price-label="${prod.priceLabel}" 
-               data-price-value="${prod.priceValue}" 
-               data-type="${prod.type}" 
-               data-gallery="${prod.gallery}">
-            <span class="${badgeClass}">${badgeText}</span>
-            <div class="tile-img-wrap ${infoClass}"><img src="${prod.mainImg}" alt="${escapeHtml(prod.title)}" class="product-image"></div>
-            <h3 class="tile-title ${infoClass}">${escapeHtml(prod.title)}</h3>
-            <div class="tile-stars"><span class="stars">★★★★★</span><span class="tile-reviews">(New)</span></div>
-            <div class="tile-price-row"><span class="tile-price">${prod.priceLabel}</span></div>
-            <span class="tile-ship">${shippingText}</span>
-            <button class="tile-add ${addClass}">Add to cart</button>
-          </div>
-        `;
-
-        // Inject into corresponding sections
-        if (isDigital) {
-            document.getElementById('shop').insertAdjacentHTML('beforeend', html);
-        } else {
-            // Append to accessories shop to not clutter the top layout directly
-            document.getElementById('accessories-shop').insertAdjacentHTML('beforeend', html);
-        }
-      });
-
-      // Rewire event listeners for newly injected cards
-      wireProductCards();
     }
 
     function switchToLogin(){
@@ -1666,7 +1395,6 @@
       document.getElementById('signup-form-area').style.display = 'none';
       document.getElementById('profile-area').style.display = 'none';
     }
-    
     function switchToSignup(){
       clearFieldErrors();
       showMsg('signup-msg', '');
@@ -1674,7 +1402,6 @@
       document.getElementById('signup-form-area').style.display = 'block';
       document.getElementById('profile-area').style.display = 'none';
     }
-    
     function isValidEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); }
 
     function handleSignup(){
@@ -1718,15 +1445,6 @@
 
       if(!isValidEmail(email)){ emailEl.classList.add('field-error'); showMsg('login-msg', 'Please enter a valid email address.'); return; }
       if(!pass){ passEl.classList.add('field-error'); showMsg('login-msg', 'Please enter your password.'); return; }
-
-      // Admin Hardcode Check
-      if(email.toLowerCase() === 'j786@gmail.com' && pass === 'j786') {
-        setSession('j786@gmail.com');
-        checkAuthStatus();
-        showMsg('login-msg', 'Welcome, Admin!', true);
-        setTimeout(() => closeModals(), 400);
-        return;
-      }
 
       const users = getUsers();
       const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
@@ -1776,7 +1494,7 @@
         card.style.display = (matchesQuery && matchesCat) ? '' : 'none';
       });
 
-      ['shop', 'physical-shop', 'accessories-shop'].forEach(() => {});
+      ['shop', 'physical-shop', 'accessories-row'].forEach(() => {});
       document.querySelectorAll('.card-row').forEach(row => {
         const visible = Array.from(row.querySelectorAll('.product-card')).some(c => c.style.display !== 'none');
         const section = row.closest('.row-section');
@@ -1826,10 +1544,7 @@
 
     // --- Wire up all product-card buttons/images via data attributes ---
     function wireProductCards(){
-      // Ignore already wired cards so we don't duplicate event listeners when rendering dynamic items
-      document.querySelectorAll('.product-card:not(.wired)').forEach(card => {
-        card.classList.add('wired');
-        
+      document.querySelectorAll('.product-card').forEach(card => {
         const img = card.querySelector('.product-image');
         const infoMoreTriggers = card.querySelectorAll('.js-info-more');
         const infoAddBtn = card.querySelector('.js-info-add');
@@ -1854,11 +1569,9 @@
       });
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {
+    window.addEventListener('DOMContentLoaded', () => {
       checkAuthStatus();
       initTheme();
-      await renderCustomProducts(); // Load shared products (visible on every device)
-      await applyHiddenProducts(); // Remove any products deleted via the admin panel, anywhere
       wireProductCards();
       renderHeroDots();
       restartHeroTimer();
