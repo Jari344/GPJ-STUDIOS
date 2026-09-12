@@ -1054,7 +1054,7 @@
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="close-modal" onclick="closeModals()">&times;</button>
       <h3 style="margin-top:0; font-family:'Space Grotesk', sans-serif; font-weight:700;">Add New Product</h3>
-      <p style="color:var(--ink-dim); font-size:0.85rem; margin-bottom:24px; font-weight:500;">Add an item directly to your store catalog.</p>
+      <p style="color:var(--ink-dim); font-size:0.85rem; margin-bottom:24px; font-weight:500;">Add an item directly to your store catalog. Changes here are visible to every visitor, on every device.</p>
 
       <form onsubmit="event.preventDefault(); handleAddProduct();">
         <div class="form-group">
@@ -1413,6 +1413,41 @@
     }
 
     // --- Real (client-side only) Auth System & Admin Panel ---
+    // NOTE: product data (added/deleted products) is stored with shared:true so it
+    // is visible to every visitor on every device, not just this browser.
+    async function loadCustomProducts(){
+      try {
+        const result = await window.storage.get('custom_products', true);
+        return result ? JSON.parse(result.value) : [];
+      } catch(e) {
+        return [];
+      }
+    }
+    async function saveCustomProducts(list){
+      try {
+        const result = await window.storage.set('custom_products', JSON.stringify(list), true);
+        if(!result) console.error('Failed to save custom products');
+      } catch(e) {
+        console.error('Storage error saving custom products:', e);
+      }
+    }
+    async function loadHiddenProducts(){
+      try {
+        const result = await window.storage.get('hidden_products', true);
+        return result ? JSON.parse(result.value) : [];
+      } catch(e) {
+        return [];
+      }
+    }
+    async function saveHiddenProducts(list){
+      try {
+        const result = await window.storage.set('hidden_products', JSON.stringify(list), true);
+        if(!result) console.error('Failed to save hidden products');
+      } catch(e) {
+        console.error('Storage error saving hidden products:', e);
+      }
+    }
+
     function getUsers(){
       try { return JSON.parse(localStorage.getItem('gpj_users')) || []; }
       catch(e) { return []; }
@@ -1468,16 +1503,16 @@
       document.getElementById('login-modal').classList.add('open');
     }
 
-    function openAdminModal() {
+    async function openAdminModal() {
       closeModals(); // Close the profile modal
       clearFieldErrors();
       showMsg('admin-msg', '');
       document.getElementById('admin-modal').classList.add('open');
-      renderAdminProductList();
+      await renderAdminProductList();
     }
 
     // --- Admin: manage/delete products ---
-    function renderAdminProductList(){
+    async function renderAdminProductList(){
       const listEl = document.getElementById('admin-product-list');
       if(!listEl) return;
 
@@ -1509,36 +1544,36 @@
       });
     }
 
-    function deleteProduct(card){
+    async function deleteProduct(card){
       if(!card) return;
       const title = card.dataset.title || '';
-      if(!confirm(`Delete "${title}" from the store? This cannot be undone.`)) return;
+      if(!confirm(`Delete "${title}" from the store? This will remove it for everyone, on every device.`)) return;
 
       if(card.classList.contains('dynamic-product-card')){
-        // Custom product added via the admin form — remove it from the saved catalog
-        let customProducts = JSON.parse(localStorage.getItem('gpj_custom_products') || '[]');
+        // Custom product added via the admin form — remove it from the shared catalog
+        let customProducts = await loadCustomProducts();
         customProducts = customProducts.filter(p => p.title !== title);
-        localStorage.setItem('gpj_custom_products', JSON.stringify(customProducts));
+        await saveCustomProducts(customProducts);
       } else {
-        // Built-in product — remember it's hidden so it stays gone after a reload
-        let hidden = JSON.parse(localStorage.getItem('gpj_hidden_products') || '[]');
+        // Built-in product — remember it's hidden (shared) so it stays gone everywhere
+        let hidden = await loadHiddenProducts();
         if(!hidden.includes(title)) hidden.push(title);
-        localStorage.setItem('gpj_hidden_products', JSON.stringify(hidden));
+        await saveHiddenProducts(hidden);
       }
 
       card.remove();
       renderAdminProductList();
     }
 
-    function applyHiddenProducts(){
-      const hidden = JSON.parse(localStorage.getItem('gpj_hidden_products') || '[]');
+    async function applyHiddenProducts(){
+      const hidden = await loadHiddenProducts();
       if(hidden.length === 0) return;
       document.querySelectorAll('.product-card').forEach(card => {
         if(hidden.includes(card.dataset.title)) card.remove();
       });
     }
 
-    function handleAddProduct() {
+    async function handleAddProduct() {
       const title = document.getElementById('admin-title').value.trim();
       const desc = document.getElementById('admin-desc').value.trim();
       const price = parseFloat(document.getElementById('admin-price').value);
@@ -1562,11 +1597,11 @@
         type, mainImg, gallery
       };
 
-      let customProducts = JSON.parse(localStorage.getItem('gpj_custom_products') || '[]');
+      let customProducts = await loadCustomProducts();
       customProducts.push(newProduct);
-      localStorage.setItem('gpj_custom_products', JSON.stringify(customProducts));
+      await saveCustomProducts(customProducts);
 
-      showMsg('admin-msg', 'Product added successfully!', true);
+      showMsg('admin-msg', 'Product added successfully! It will show up for everyone, on every device.', true);
 
       // Clear the form
       document.getElementById('admin-title').value = '';
@@ -1575,11 +1610,12 @@
       document.getElementById('admin-img').value = '';
 
       // Render the new item immediately
-      renderCustomProducts();
+      await renderCustomProducts();
+      renderAdminProductList();
     }
 
-    function renderCustomProducts() {
-      let customProducts = JSON.parse(localStorage.getItem('gpj_custom_products') || '[]');
+    async function renderCustomProducts() {
+      let customProducts = await loadCustomProducts();
       
       // Clean up previously rendered dynamic products so they don't duplicate on re-render
       document.querySelectorAll('.dynamic-product-card').forEach(el => el.remove());
@@ -1818,11 +1854,11 @@
       });
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       checkAuthStatus();
       initTheme();
-      renderCustomProducts(); // Inject localStorage database products on page load
-      applyHiddenProducts(); // Remove any products deleted via the admin panel on a previous visit
+      await renderCustomProducts(); // Load shared products (visible on every device)
+      await applyHiddenProducts(); // Remove any products deleted via the admin panel, anywhere
       wireProductCards();
       renderHeroDots();
       restartHeroTimer();
