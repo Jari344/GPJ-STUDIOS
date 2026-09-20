@@ -235,6 +235,13 @@ html[data-mode=light] .theme-toggle .i-light{display:inline-flex}
 .info-img-wrap{width:100%;max-height:52vh;border-radius:24px;margin:34px 0 0;background:var(--well);border:var(--bd);box-shadow:var(--sh-in);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:10px;position:relative}
 #m-media{width:100%;display:flex;align-items:center;justify-content:center}
 #m-media img,#m-media video{width:100%;max-height:44vh;object-fit:contain;border-radius:16px;display:block}
+.vplayer{position:relative;width:100%;border-radius:16px;overflow:hidden;background:#000}
+.vplay{position:absolute;inset:0;width:100%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vbtn{width:64px;height:64px;border-radius:50%;background:var(--a);border:var(--btn-bd);box-shadow:var(--a-sh);color:#fff8ef;display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .15s}
+.vbtn svg{margin-left:3px}
+.vplay:hover .vbtn{transform:scale(1.06)}
+.vplayer.playing .vbtn{opacity:0}
+.vplayer.playing .vplay:focus-visible .vbtn{opacity:1}
 .gallery-prev{left:10px}.gallery-next{right:10px}
 .no-nav .gallery-nav{display:none}
 .gallery-dots{display:flex;justify-content:center;gap:7px;margin:12px 0 18px}
@@ -301,6 +308,79 @@ footer{background:var(--nav);padding:40px clamp(14px,3vw,32px) 24px;border-top:v
 .footer-bottom{max-width:1280px;margin:0 auto;padding-top:22px;border-top:1px solid rgba(128,128,128,.2);display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;color:var(--ink-faint);font-size:.78rem;font-weight:600}
 .footer-bottom .wordmark-blob{width:26px;height:26px;font-size:.7rem}
 @media(max-width:760px){.footer-cols{grid-template-columns:repeat(2,1fr)}}
+/* ============ LIQUID GLASS — iOS refinements (Clay is untouched) ============ */
+html[data-style=glass]{
+  --fs:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text',system-ui,'Helvetica Neue',sans-serif;
+  --ink:#fff;--ink-dim:rgba(235,235,245,.72);--ink-faint:rgba(235,235,245,.5);
+  --bg:radial-gradient(50% 42% at 10% 8%,rgba(64,110,255,.55),transparent 70%),radial-gradient(46% 40% at 92% 12%,rgba(175,82,222,.5),transparent 70%),radial-gradient(50% 44% at 15% 90%,rgba(255,105,120,.38),transparent 72%),radial-gradient(44% 40% at 90% 88%,rgba(255,159,10,.34),transparent 70%),linear-gradient(170deg,#0a0a14,#12101f 50%,#0a0a14);
+  --surf:radial-gradient(140% 100% at 0% 0%,rgba(255,255,255,.24),rgba(255,255,255,0) 55%),linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  --surf2:radial-gradient(140% 100% at 0% 0%,rgba(255,255,255,.32),rgba(255,255,255,0) 58%),linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.06));
+  --bd:1px solid rgba(255,255,255,.16);
+  --sh:0 12px 36px rgba(0,0,0,.28),inset 1.5px 1.5px 0 rgba(255,255,255,.42),inset -1px -1px 0 rgba(255,255,255,.1),inset 0 0 24px rgba(255,255,255,.05);
+  --sh-fl:0 22px 54px rgba(0,0,0,.36),inset 1.5px 1.5px 0 rgba(255,255,255,.42),inset -1px -1px 0 rgba(255,255,255,.1),inset 0 0 24px rgba(255,255,255,.05);
+  --sh-sm:0 6px 18px rgba(0,0,0,.24),inset 1px 1px 0 rgba(255,255,255,.4),inset -1px -1px 0 rgba(255,255,255,.08);
+  --sh-in:inset 0 2px 8px rgba(0,0,0,.28),inset 0 -1px 0 rgba(255,255,255,.1);
+  --blur:blur(26px) saturate(200%);
+  --well:rgba(120,120,128,.26);--hov:rgba(255,255,255,.12);
+  --a:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 52%),linear-gradient(135deg,var(--terra-l),var(--terra-d));
+  --a-sh:0 8px 20px rgba(0,0,0,.28),inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(0,0,0,.12);
+  --g:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 52%),linear-gradient(135deg,var(--gold),var(--terra-d));
+  --g-sh:var(--a-sh);--btn-bd:1px solid rgba(255,255,255,.35);
+}
+html[data-style=glass][data-mode=light]{
+  --ink:#1c1c1e;--ink-dim:#5c5c63;--ink-faint:#8a8a91;
+  --bg:radial-gradient(50% 42% at 10% 8%,rgba(120,170,255,.6),transparent 70%),radial-gradient(46% 40% at 92% 12%,rgba(255,170,205,.55),transparent 70%),radial-gradient(50% 44% at 15% 90%,rgba(150,230,190,.5),transparent 72%),radial-gradient(44% 40% at 90% 88%,rgba(255,210,140,.55),transparent 70%),linear-gradient(170deg,#f2f2f7,#ebebf2 50%,#f2f2f7);
+  --surf:radial-gradient(140% 100% at 0% 0%,rgba(255,255,255,.85),rgba(255,255,255,0) 60%),linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.28));
+  --surf2:radial-gradient(140% 100% at 0% 0%,rgba(255,255,255,.95),rgba(255,255,255,0) 62%),linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.42));
+  --bd:1px solid rgba(255,255,255,.7);
+  --sh:0 12px 32px rgba(70,80,120,.18),inset 1.5px 1.5px 0 rgba(255,255,255,.95),inset -1px -1px 0 rgba(255,255,255,.5),inset 0 0 24px rgba(255,255,255,.25);
+  --sh-fl:0 22px 46px rgba(70,80,120,.24),inset 1.5px 1.5px 0 rgba(255,255,255,.95),inset -1px -1px 0 rgba(255,255,255,.5),inset 0 0 24px rgba(255,255,255,.25);
+  --sh-sm:0 6px 16px rgba(70,80,120,.14),inset 1px 1px 0 rgba(255,255,255,.9),inset -1px -1px 0 rgba(255,255,255,.4);
+  --sh-in:inset 0 2px 6px rgba(70,80,120,.16),inset 0 -1px 0 rgba(255,255,255,.5);
+  --well:rgba(120,120,128,.14);--hov:rgba(255,255,255,.55);
+}
+html[data-style=glass] body,html[data-style=glass] :is(h1,h2,h3,h4,.wordmark,.tile-price){font-family:var(--fs)}
+html[data-style=glass]{scroll-padding-top:calc(132px + env(safe-area-inset-top,0px))}
+/* floating bars */
+html[data-style=glass] .topnav{margin:10px clamp(10px,2vw,24px) 0;border-radius:30px;border:var(--bd);box-shadow:var(--sh);top:calc(10px + env(safe-area-inset-top,0px))}
+html[data-style=glass] .catnav{margin:8px clamp(10px,2vw,24px) 0;padding:6px 10px;border-radius:999px;border:var(--bd);box-shadow:var(--sh-sm);top:calc(84px + env(safe-area-inset-top,0px))}
+html[data-style=glass] .catnav a,html[data-style=glass] .nav-action,html[data-style=glass] .deliver-to,html[data-style=glass] .nav-cart{border-radius:999px}
+html[data-style=glass] .nav-search{border-radius:999px;box-shadow:none;border-color:transparent}
+html[data-style=glass] .nav-search input{padding:0 16px}
+html[data-style=glass] :is(.theme-toggle,.close-modal,.drawer-close,.hero-nav,.gallery-nav,.deal-icon){border-radius:50%}
+html[data-style=glass] .wordmark-blob{border-radius:11px}
+html[data-style=glass] .cart-count{background:#ff3b30;color:#fff;box-shadow:0 2px 6px rgba(255,59,48,.5)}
+/* capsule buttons */
+html[data-style=glass] :is(.hero-cta,.deal-cta,.tile-add,.tile-buy,.primary-btn,.checkout-btn,.set-actions button,.drawer-item-remove,.tile-badge){border-radius:999px}
+/* surfaces */
+html[data-style=glass] .hero-carousel{border-radius:38px}
+html[data-style=glass] .deal-banner{border-radius:34px}
+html[data-style=glass] .tile{border-radius:30px}
+html[data-style=glass] .explore-box{border-radius:28px}
+html[data-style=glass] .tile-img-wrap{border-radius:22px;box-shadow:none;border-color:rgba(255,255,255,.12)}
+html[data-style=glass] .explore-thumb{border-radius:16px;box-shadow:none}
+html[data-style=glass] .form-group :is(input,textarea){border-radius:14px;box-shadow:none}
+/* sheets: real glass needs the page behind it, so no blur on the dimmer */
+html[data-style=glass] :is(.scrim,.modal-overlay){background:rgba(0,0,0,.3);backdrop-filter:none;-webkit-backdrop-filter:none}
+html[data-style=glass] .modal-content{border-radius:38px;padding-top:40px}
+html[data-style=glass] .modal-content::before{content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.4)}
+html[data-style=glass][data-mode=light] .modal-content::before{background:rgba(60,60,67,.3)}
+html[data-style=glass] .drawer{top:8px;right:8px;bottom:8px;width:min(400px,calc(100% - 16px));border-radius:36px;border:var(--bd);box-shadow:var(--sh-fl);transform:translateX(calc(100% + 16px))}
+html[data-style=glass] .drawer.open{transform:none}
+@media(max-width:600px){
+  html[data-style=glass] .modal-overlay{align-items:flex-end;padding:8px}
+  html[data-style=glass] .modal-content{width:100%;max-width:none;max-height:92vh;padding-bottom:calc(34px + env(safe-area-inset-bottom,0px));transform:translateY(60px)}
+  html[data-style=glass] .modal-overlay.open .modal-content{transform:none}
+}
+/* iOS segmented control + switch */
+html[data-style=glass] .seg{border-radius:999px;padding:3px;box-shadow:none;border-color:transparent}
+html[data-style=glass] .seg button{border-radius:999px;color:var(--ink)}
+html[data-style=glass] .seg button[aria-pressed=true]{background:rgba(255,255,255,.26);color:var(--ink);box-shadow:0 3px 10px rgba(0,0,0,.25),inset 1px 1px 0 rgba(255,255,255,.5)}
+html[data-style=glass][data-mode=light] .seg button[aria-pressed=true]{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.16)}
+html[data-style=glass] .switch{width:51px;height:31px;border-radius:999px;background:rgba(120,120,128,.36);box-shadow:none;border:0}
+html[data-style=glass] .switch::after{width:27px;height:27px;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+html[data-style=glass] .switch[aria-checked=true]{background:#34c759}
+html[data-style=glass] .switch[aria-checked=true]::after{transform:translateX(20px);background:#fff}
 </style>
 </head>
 <body>
@@ -618,6 +698,7 @@ function closeDrawer(){$('drawer').classList.remove('open');$('scrim').classList
 function closeModals(e){
   if(e&&e.target!==e.currentTarget)return;
   document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));
+  const pv=document.querySelector('#m-media video');if(pv)pv.pause();
 }
 
 /* ---------- product modal ---------- */
@@ -629,7 +710,15 @@ function openProduct(id){
 }
 function renderGallery(){
   const s=gm[gi];
-  $('m-media').innerHTML=/\.(mp4|webm|ogg|mov)$/i.test(s)?`<video src="${esc(s)}" controls playsinline></video>`:`<img src="${esc(s)}" alt="${esc(ap.t)}">`;
+  $('m-media').innerHTML=/\.(mp4|webm|ogg|mov)$/i.test(s)
+    ?`<div class="vplayer"><video src="${esc(s)}" playsinline preload="metadata" disablepictureinpicture disableremoteplayback controlslist="nodownload noplaybackrate noremoteplayback" oncontextmenu="return false"></video><button class="vplay" data-vplay aria-label="Play video"><span class="vbtn"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></button></div>`
+    :`<img src="${esc(s)}" alt="${esc(ap.t)}">`;
+  const v=$('m-media').querySelector('video');
+  if(v){
+    const box=v.parentElement,btn=box.querySelector('.vplay');
+    const sync=()=>{const on=!v.paused&&!v.ended;box.classList.toggle('playing',on);btn.setAttribute('aria-label',on?'Pause video':'Play video')};
+    ['play','pause','ended'].forEach(ev=>v.addEventListener(ev,sync));
+  }
   $('m-dots').innerHTML=gm.map((_,i)=>`<span class="gallery-dot${i===gi?' active':''}" data-i="${i}"></span>`).join('');
   $('m-wrap').classList.toggle('no-nav',gm.length<2);
 }
@@ -775,6 +864,8 @@ document.addEventListener('click',e=>{
     if(add){const old=add.textContent;add.textContent='Added';add.classList.add('added');setTimeout(()=>{add.textContent=old;add.classList.remove('added')},900);return addItem(p)}
     if(t.closest('[data-buy]'))return addItem(p,true);
   }
+  const vp=t.closest('[data-vplay]');
+  if(vp){const v=vp.parentElement.querySelector('video');if(v.paused||v.ended)v.play();else v.pause();return}
   const dot=t.closest('.gallery-dot');if(dot){gi=+dot.dataset.i;renderGallery();return}
   const hd=t.closest('.hero-dot');if(hd){hi=+hd.dataset.h;heroUpdate();restartHeroTimer();return}
   const st=t.closest('[data-set]');if(st){S[st.dataset.set]=st.dataset.val;commit();return}
